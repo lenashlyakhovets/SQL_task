@@ -5,9 +5,9 @@ delete from stepik.book where book_id = 5;
 insert into stepik.book (book_id, title, author, price, amount)
 values 	
 	(5, 'Игрок', 'Достоевский Ф.М.', '480.50', '10');
-insert into stepik.book (title, author, price, amount)
+insert into stepik.book (book_id, title, author, price, amount)
 values    
-    ('Стихотворения и поэмы', 'Есенин С.А.', '650.0', '15');
+    (6, 'Стихотворения и поэмы', 'Есенин С.А.', '650.0', '15');
 
 select * from stepik.book;
 
