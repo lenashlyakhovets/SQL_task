@@ -62,3 +62,13 @@ where price < any (
 Поскольку книгу с максимальным количеством экземпляров заказывать не нужно, в условии отбора запроса укажите, что книгу с максимальным значением количества в результирующую таблицу не включать. 
 */
 
+select title, author, amount, 
+	(
+	select max(amount)
+	from stepik.book
+	) - amount as 'Заказ'
+from stepik.book
+where amount <> (
+	select max(amount)
+    from stepik.book
+	);
