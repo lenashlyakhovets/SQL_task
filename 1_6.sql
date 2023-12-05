@@ -88,19 +88,39 @@ order by 3 desc, city desc;
 Используйте вложенный запрос, чтобы найти длительность самой короткой командировки. 
 */
 
-
+select name, city, date_first, date_last
+from stepik.trip
+where (datediff(date_last, date_first)) = (
+	select min(datediff(date_last, date_first))
+	from stepik.trip
+	);
 
 /*
 Вывести информацию о командировках, начало и конец которых относятся к одному месяцу (год может быть любой). В результат включить столбцы name, city, date_first, date_last. Строки отсортировать сначала  в алфавитном порядке по названию города, а затем по фамилии сотрудника .
 */
 
-
+select 
+	name, 
+    city, 
+    date_first, 
+    date_last
+from 
+	stepik.trip
+where 
+	month(date_first) = month(date_last)
+order by 
+	city, 
+    name;
 
 /*
 Вывести название месяца и количество командировок для каждого месяца. Считаем, что командировка относится к некоторому месяцу, если она началась в этом месяце. Информацию вывести сначала в отсортированном по убыванию количества, а потом в алфавитном порядке по названию месяца виде. Название столбцов – Месяц и Количество.
 */
 
-
+select monthname(date_first) as Месяц,
+	count(monthname(date_first)) as Количество
+from stepik.trip
+group by monthname(date_first)
+order by 2 desc, 1;
 
 /*
 Вывести сумму суточных (произведение количества дней командировки и размера суточных) для командировок, первый день которых пришелся на февраль или март 2020 года. Значение суточных для каждой командировки занесено в столбец per_diem. Вывести фамилию и инициалы сотрудника, город, первый день командировки и сумму суточных. Последний столбец назвать Сумма. Информацию отсортировать сначала  в алфавитном порядке по фамилиям сотрудников, а затем по убыванию суммы суточных.
@@ -112,10 +132,50 @@ YEAR('2020-02-01') = 2020
 2. Количество дней командировки вычисляется как разница между датами последнего и первого дня командировки плюс 1.
 */
 
-
+select 
+	name, 
+    city, 
+    date_first, 
+    (datediff(date_last, date_first) + 1) * per_diem as Сумма
+from 
+	stepik.trip
+where 
+	month(date_first) in (2, 3) and year(date_first) = 2020
+order by 
+	name,
+    (datediff(date_last, date_first) + 1) * per_diem desc;
 
 /*
 Вывести фамилию с инициалами и общую сумму суточных, полученных за все командировки для тех сотрудников, которые были в командировках больше чем 3 раза, в отсортированном по убыванию сумм суточных виде. Последний столбец назвать Сумма.
 Только для этого задания изменена строка таблицы trip:
 4	Ильиных Г.Р.	Владивосток	450	2020-01-12	2020-03-02
+*/
+
+/*
+update stepik.trip
+set date_last = '2020-03-02'
+where name = 'Ильиных Г.Р.';
+select * from stepik.trip;
+*/
+
+select 
+	name, 
+    sum((datediff(date_last, date_first) + 1) * per_diem) as Сумма
+from
+	stepik.trip
+where 
+	name in (
+		select name
+		from stepik.trip
+		group by name
+		having count(name) > 3
+    )
+group by name    
+order by 2 desc;
+
+/*
+update stepik.trip
+set date_last = '2020-02-02'
+where name = 'Ильиных Г.Р.';
+select * from stepik.trip;
 */
