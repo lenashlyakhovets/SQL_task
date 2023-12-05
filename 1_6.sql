@@ -162,6 +162,22 @@ select
 	name, 
     sum((datediff(date_last, date_first) + 1) * per_diem) as Сумма
 from
+	trip
+group by name
+having
+    name in (
+		select name
+		from trip
+		group by name
+		having count(name) > 3
+    )
+order by 2 desc;
+
+/*
+select 
+	name, 
+    sum((datediff(date_last, date_first) + 1) * per_diem) as Сумма
+from
 	stepik.trip
 where 
 	name in (
@@ -172,6 +188,7 @@ where
     )
 group by name    
 order by 2 desc;
+*/
 
 /*
 update stepik.trip
