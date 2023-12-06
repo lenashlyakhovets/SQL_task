@@ -166,6 +166,6 @@ select * from stepik.back_payment;
 Удалить из таблицы fine информацию о нарушениях, совершенных раньше 1 февраля 2020 года. 
 */
 
-delete from fine
+delete from stepik.fine
 where date_violation < '2020-02-01';
 
