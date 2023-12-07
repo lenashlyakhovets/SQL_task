@@ -21,7 +21,8 @@ values
     ('Булгаков М.А.'),
     ('Достоевский Ф.М.'),    
     ('Есенин С.А.'),
-    ('Пастернак Б.Л.');
+    ('Пастернак Б.Л.'),
+    ('Лермонтов М.Ю.');
 
 select * from stepik.author;
 
@@ -34,7 +35,8 @@ create table stepik.genre
 insert into stepik.genre (name_genre)
 values
     ('Роман'),
-    ('Поэзия');
+    ('Поэзия'),
+    ('Приключения');
 
 select * from stepik.genre;
 
