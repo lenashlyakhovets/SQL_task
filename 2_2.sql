@@ -97,3 +97,114 @@ order by 2;
 Вывести в алфавитном порядке всех авторов, которые пишут только в одном жанре. Поскольку у нас в таблицах так занесены данные, что у каждого автора книги только в одном жанре,  для этого запроса внесем изменения в таблицу book. Пусть у нас  книга Есенина «Черный человек» относится к жанру «Роман», а книга Булгакова «Белая гвардия» к «Приключениям» (эти изменения в таблицы уже внесены).
 */
 
+/*
+update stepik.book
+set genre_id = 3
+where book_id = 2;
+select * from stepik.book;
+
+update stepik.book
+set genre_id = 1
+where book_id = 7;
+select * from stepik.book;
+*/
+
+select name_author
+from stepik.author inner join 
+	(
+	select author_id
+	from stepik.book
+	group by author_id
+	having count(distinct genre_id) = 1
+	) as query_in
+	on stepik.author.author_id = stepik.query_in.author_id
+order by name_author;
+
+/*
+Вывести информацию о книгах (название книги, фамилию и инициалы автора, название жанра, цену и количество экземпляров книги), написанных в самых популярных жанрах, в отсортированном в алфавитном порядке по названию книг виде. Самым популярным считать жанр, общее количество экземпляров книг которого на складе максимально.
+*/
+
+/*
+DROP TABLE IF EXISTS stepik.book;
+
+create table stepik.book 
+(
+    book_id int primary key auto_increment,
+    title varchar(50),
+    author_id int not null,    
+    genre_id int null,
+    price decimal(8,2),
+    amount int,
+    foreign key (author_id) references stepik.author (author_id) ON DELETE CASCADE,
+    foreign key (genre_id) references stepik.genre (genre_id) ON DELETE SET NULL
+);
+
+insert into stepik.book (book_id, title, author_id, genre_id, price, amount)
+values
+	(1, 'Мастер и Маргарита', 1, 1, 670.99, 3),
+    (2, 'Белая гвардия', 1, 1, 540.50, 5),
+    (3, 'Братья Карамазовы', 2, 1, 799.01, 3),
+    (4, 'Игрок', 2, 1, 480.50, 10),
+    (5, 'Стихотворения и поэмы', 3, 2, 650.00, 15),
+    (6, 'Черный человек', 3, 2, 570.20, 6),
+    (7, 'Лирика', 4, 2, 518.99, 10),
+    (8, 'Идиот', 2, 1, 460.00, 10),
+    (9, 'Герой нашего времени', 5, 3, 570.59, 2),
+    (10, 'Доктор Живаго', 4, 3, 740.50, 5); 
+
+select * from stepik.book;
+*/
+
+
+
+/*
+Если в таблицах supply и book есть одинаковые книги, которые имеют равную цену, вывести их название и автора, а также посчитать общее количество экземпляров книг в таблицах supply и book, столбцы назвать Название, Автор и Количество.
+*/
+
+/*
+DROP TABLE IF EXISTS stepik.book;
+
+create table stepik.book 
+(
+    book_id int primary key auto_increment,
+    title varchar(50),
+    author_id int not null,    
+    genre_id int null,
+    price decimal(8,2),
+    amount int,
+    foreign key (author_id) references stepik.author (author_id) ON DELETE CASCADE,
+    foreign key (genre_id) references stepik.genre (genre_id) ON DELETE SET NULL
+);
+
+insert into stepik.book (book_id, title, author_id, genre_id, price, amount)
+values
+	(1, 'Мастер и Маргарита', 1, 1, 670.99, 3),
+    (2, 'Белая гвардия', 1, 1, 540.50, 5),
+    (3, 'Идиот', 2, 1, 460.00, 10),
+    (4, 'Братья Карамазовы', 2, 1, 799.01, 3),
+    (5, 'Игрок', 2, 1, 480.50, 10),
+    (6, 'Стихотворения и поэмы', 3, 2, 650.00, 15),
+    (7, 'Черный человек', 3, 2, 570.20, 6),
+    (8, 'Лирика', 4, 2, 518.99, 2);
+
+select * from stepik.book;
+
+create table stepik.supply 
+(
+    supply_id int primary key auto_increment,
+    title varchar(50),
+    author int not null,    
+    price decimal(8,2),
+    amount int    
+);
+
+insert into stepik.supply (supply_id, title, author, price, amount)
+values
+	(1, 'Доктор Живаго', 'Пастернак Б.Л.', 618.99, 3),
+    (2, 'Черный человек', 'Есенин С.А.', 570.20, 6),
+    (3, 'Евгений Онегин', 'Пушкин А.С.', 440.80, 5),
+    (4, 'Идиот', 'Достоевский Ф.М.', 360.80, 3);
+
+select * from stepik.supply;
+*/
+
