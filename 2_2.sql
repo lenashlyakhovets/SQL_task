@@ -155,7 +155,31 @@ values
 select * from stepik.book;
 */
 
-
+SELECT title, name_author, name_genre, price, amount
+FROM 
+    stepik.author 
+    INNER JOIN stepik.book ON stepik.author.author_id = stepik.book.author_id
+    INNER JOIN stepik.genre ON stepik.book.genre_id = stepik.genre.genre_id
+where genre.genre_id IN
+         (/* выбираем автора, если он пишет книги в самых популярных жанрах*/
+          SELECT query_in_1.genre_id
+          FROM 
+              ( /* выбираем код жанра и количество произведений, относящихся к нему */
+                SELECT genre_id, SUM(amount) AS sum_amount
+                FROM stepik.book
+                GROUP BY genre_id
+               )query_in_1
+          INNER JOIN 
+              ( /* выбираем запись, в которой указан код жанр с максимальным количеством книг */
+                SELECT genre_id, SUM(amount) AS sum_amount
+                FROM stepik.book
+                GROUP BY genre_id
+                ORDER BY sum_amount DESC
+                LIMIT 1
+               ) query_in_2
+          ON query_in_1.sum_amount= query_in_2.sum_amount
+         )
+order by title;
 
 /*
 Если в таблицах supply и book есть одинаковые книги, которые имеют равную цену, вывести их название и автора, а также посчитать общее количество экземпляров книг в таблицах supply и book, столбцы назвать Название, Автор и Количество.
