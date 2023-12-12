@@ -217,7 +217,7 @@ create table stepik.supply
 (
     supply_id int primary key auto_increment,
     title varchar(50),
-    author int not null,    
+    author varchar(50),    
     price decimal(8,2),
     amount int    
 );
@@ -232,3 +232,12 @@ values
 select * from stepik.supply;
 */
 
+SELECT book.title as Название, 
+    name_author as Автор, 
+    (book.amount + supply.amount) as Количество
+FROM 
+    stepik.author 
+    INNER JOIN stepik.book USING (author_id)   
+    INNER JOIN stepik.supply ON book.title = supply.title 
+                         and author.name_author = supply.author
+                         and book.amount = supply.amount;
