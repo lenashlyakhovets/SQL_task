@@ -62,7 +62,43 @@ select * from stepik.author;
 Если нужно оставить какое-то поле пустым - его просто не указывают в списке полей таблицы, в которую добавляются записи.
 */
 
-select title, author_id, price, amount
-from author 
-     right join supply on author.name_author = supply.author
+insert into stepik.book (title, author_id, price, amount)
+    select title, author_id, price, amount
+    from stepik.supply 
+         left join stepik.author on author.name_author = supply.author
+    where amount <> 0;         
+select * from stepik.book;
 
+/*
+Занести для книги «Стихотворения и поэмы» Лермонтова жанр «Поэзия», а для книги «Остров сокровищ» Стивенсона - «Приключения». (Использовать два запроса).
+*/
+
+update stepik.book
+set genre_id = 
+    (
+    select genre_id
+    from stepik.genre
+    where name_genre = 'Поэзия'
+    )
+where author_id = 
+    (
+    select author_id
+    from stepik.author
+    where name_author like '%Лермонтов М.Ю.%'
+    );
+
+update stepik.book
+set genre_id = 
+    (
+    select genre_id
+    from stepik.genre
+    where name_genre = 'Приключения'
+    )
+where author_id = 
+    (
+    select author_id
+    from stepik.author
+    where name_author like '%Стивенсон Р.Л.%'
+    );
+    
+select * from stepik.book;
