@@ -102,3 +102,50 @@ where author_id =
     );
     
 select * from stepik.book;
+
+/*
+Удалить всех авторов и все их книги, общее количество книг которых меньше 20.
+Пояснение:
+Для подсчета количества книг каждого автора используйте вложенный запрос. 
+*/
+
+delete from stepik.author
+where stepik.author.author_id in (
+    select author_id
+    from stepik.book
+    group by author_id
+    having sum(amount) < 20
+    );
+select * from stepik.author;
+select * from stepik.book;
+
+/*
+Задание
+Удалить все жанры, к которым относится меньше 4-х наименований книг. В таблице book для этих жанров установить значение Null.
+Пояснение:
+В запросе считать все уникальные книги. Например, книги "Стихотворения и поэмы" написаны разными авторами и имеют разный book_id, то есть это разные книги.
+Для отбора жанров, к которым относится меньше 4-х книг,  использовать вложенный запрос.
+*/
+
+delete from stepik.genre 
+where genre_id in (
+    select genre_id
+    from stepik.book
+    group by genre_id
+    having count(genre_id) < 4
+    );
+select * from stepik.genre;
+select * from stepik.book;
+
+/*
+Удалить всех авторов, которые пишут в жанре "Поэзия". Из таблицы book удалить все книги этих авторов. В запросе для отбора авторов использовать полное название жанра, а не его id.
+*/
+
+delete from stepik.author
+using stepik.author 
+    inner join stepik.book on author.author_id = book.author_id
+    inner join stepik.genre on book.genre_id = genre.genre_id
+where name_genre like '%Поэзия%';
+select * from stepik.author;
+select * from stepik.book;
+
