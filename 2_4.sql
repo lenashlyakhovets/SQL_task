@@ -157,19 +157,47 @@ having sum(buy_book.amount) =
 */
 
 select 
+	year(date_payment) as Год,
+    monthname(date_payment) as Месяц,
+    sum(price * amount) as Сумма
+from store.buy_archive
+group by 1, 2
+union 
+select
 	year(date_step_end) as Год, 
     monthname(date_step_end) as Месяц,
-    sum(price * buy_book.amount)
+    sum(price * buy_book.amount) as Сумма
 from 
 	store.book
     join store.buy_book using(book_id)
     join store.buy using(buy_id)
     join store.buy_step using(buy_id)
-
-
+where date_step_end is not null and step_id = 1   
+group by 1, 2
+order by 2, 1;
 
 /*
 Для каждой отдельной книги необходимо вывести информацию о количестве проданных экземпляров и их стоимости за 2020 и 2019 год . За 2020 год проданными считать те экземпляры, которые уже оплачены. Вычисляемые столбцы назвать Количество и Сумма. Информацию отсортировать по убыванию стоимости.
 Пояснение:
 При вычислении Количества и Суммы для текущего года учитывать только те книги, которые уже оплачены (указана дата оплаты для шага "Оплата" в таблице buy_step).
 */
+
+select title, sum(amount) as Количество, sum(amount * price) as Сумма
+from
+	(
+    select title, buy_archive.amount, buy_archive.price
+	from 
+		store.buy_archive
+		join store.book using(book_id)
+	union all
+	select title, buy_book.amount, price
+	from 
+		store.book
+		join store.buy_book using(book_id)
+		join store.buy using(buy_id)
+		join store.buy_step using(buy_id)
+		join store.step using(step_id)
+	where date_step_end is not null and step_id = 1
+    ) as query_in
+group by title
+order by Сумма desc;
