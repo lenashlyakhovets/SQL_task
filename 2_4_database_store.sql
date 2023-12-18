@@ -197,7 +197,7 @@ values
 select * from store.buy_step;
 
 -- 10.BUY_ARCHIVE--------------------------------------------------------
--- drop table if exists store.buy_step;
+-- drop table if exists store.buy_archive;
 
 create table store.buy_archive
 (

@@ -156,6 +156,15 @@ having sum(buy_book.amount) =
 Цена книги для текущего года хранится в таблице book, а для предыдущего в buy_archive.
 */
 
+select 
+	year(date_step_end) as Год, 
+    monthname(date_step_end) as Месяц,
+    sum(price * buy_book.amount)
+from 
+	store.book
+    join store.buy_book using(book_id)
+    join store.buy using(buy_id)
+    join store.buy_step using(buy_id)
 
 
 
