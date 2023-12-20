@@ -2,6 +2,7 @@
 
 create database store;
 use store;
+show full tables from store;
 
 -- 1.AUTHOR--------------------------------------------------------
 -- drop table if exists store.author;
@@ -55,7 +56,7 @@ create table store.book
 insert into store.book (title, author_id, genre_id, price, amount)
 values
 	('Мастер и Маргарита', 1, 1, 670.99, 3),
-	('Белая гвардия ', 1, 1, 540.50, 5),
+	('Белая гвардия', 1, 1, 540.50, 5),
 	('Идиот', 2, 1, 460.00, 10),
 	('Братья Карамазовы', 2, 1, 799.01, 2),
 	('Игрок', 2, 1, 480.50, 10),
