@@ -47,8 +47,8 @@ create table test.attempt
     subject_id int,
     date_attempt date,
     result int,
-    foreign key (student_id) references test.student (student_id),
-    foreign key (subject_id) references test.subject (subject_id)
+    foreign key (student_id) references test.student (student_id) on delete cascade,
+    foreign key (subject_id) references test.subject (subject_id) on delete cascade
 );
 
 insert into test.attempt (student_id, subject_id, date_attempt, result)
@@ -70,7 +70,7 @@ create table test.question
 	question_id int primary key auto_increment,
     name_question varchar(100),
     subject_id int,    
-    foreign key (subject_id) references test.subject (subject_id)
+    foreign key (subject_id) references test.subject (subject_id) on delete cascade
 );
 
 insert into test.question (name_question, subject_id)
@@ -94,8 +94,8 @@ create table test.answer
 	answer_id int primary key auto_increment,
     name_answer varchar(100),
     question_id int,
-    is_correct bool,
-    foreign key (question_id) references test.question (question_id)
+    is_correct boolean,
+    foreign key (question_id) references test.question (question_id) on delete cascade
 );
 
 insert into test.answer (name_answer, question_id, is_correct)
@@ -138,8 +138,8 @@ create table test.testing
 	testing_id int primary key auto_increment,
     attempt_id int,
     question_id int,
-    answer_id bool,
-    foreign key (attempt_id) references test.attempt (attempt_id)
+    answer_id boolean,
+    foreign key (attempt_id) references test.attempt (attempt_id) on delete cascade
 );
 
 insert into test.testing (attempt_id, question_id, answer_id)
