@@ -138,8 +138,10 @@ create table test.testing
 	testing_id int primary key auto_increment,
     attempt_id int,
     question_id int,
-    answer_id boolean,
-    foreign key (attempt_id) references test.attempt (attempt_id) on delete cascade
+    answer_id int,
+    foreign key (attempt_id) references test.attempt (attempt_id) on delete cascade,
+    foreign key (question_id) references test.question (question_id) on delete cascade,    
+    foreign key (answer_id) references test.answer (answer_id) on delete cascade
 );
 
 insert into test.testing (attempt_id, question_id, answer_id)
