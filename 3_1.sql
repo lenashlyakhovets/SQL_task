@@ -142,10 +142,10 @@ SELECT name_subject,
        COUNT(is_correct)                                   AS Всего_ответов, 
        ROUND(SUM(is_correct) / COUNT(is_correct) * 100, 2) AS Успешность
 FROM 
-    subject 
-    INNER JOIN question USING(subject_id)
-    INNER JOIN testing USING(question_id)
-    INNER JOIN answer USING(answer_id)
+    test.subject 
+    INNER JOIN test.question USING(subject_id)
+    INNER JOIN test.testing USING(question_id)
+    INNER JOIN test.answer USING(answer_id)
 GROUP BY name_subject, Вопрос
 ORDER BY name_subject ASC, Успешность DESC, Вопрос ASC;
 
@@ -154,9 +154,9 @@ SELECT name_subject,
        CONCAT(LEFT(name_question, 30), '...') AS Вопрос,
        COUNT(testing.attempt_id) AS Всего_ответов,
        ROUND(AVG(is_correct)*100, 2) AS Успешность
-  FROM question
-       INNER JOIN testing USING(question_id)
-       INNER JOIN answer  USING(answer_id)
-       INNER JOIN subject USING(subject_id)
+  FROM test.question
+       INNER JOIN test.testing USING(question_id)
+       INNER JOIN test.answer  USING(answer_id)
+       INNER JOIN test.subject USING(subject_id)
  GROUP BY subject.subject_id, testing.question_id
  ORDER BY 1, Успешность DESC, Вопрос;
